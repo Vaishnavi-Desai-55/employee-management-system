@@ -1,0 +1,2627 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Employee Management & Attendance</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#F2F5F3;
+  --card:#fff;
+  --ink:#15262A;
+  --mut:#5E6F72;
+  --line:#D9E1DE;
+  --pri:#0E6B66;
+  --prid:#0A4E4B;
+  --side:#12353A;
+  --ok:#2F7D4F;
+  --warn:#9A6414;
+  --bad:#B4412F;
+  --okb:#E3F1E8;
+  --warnb:#FBF0DA;
+  --badb:#F9E4DF
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font:15px/1.5 "Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  background:var(--bg);
+  color:var(--ink)
+}
+
+button,input,select,textarea{
+  font:inherit;
+  color:inherit
+}
+
+:focus-visible{
+  outline:2px solid var(--pri);
+  outline-offset:2px
+}
+
+h1{
+  font-size:26px;
+  margin:0;
+  letter-spacing:-.01em
+}
+
+h2{
+  font-size:18px;
+  margin:0 0 14px
+}
+
+.hide{
+  display:none!important
+}
+
+/* login */
+
+#login{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:1.1fr 1fr
+}
+
+.lbrand{
+  background:var(--side);
+  color:#E8F1EF;
+  padding:56px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end
+}
+
+.lbrand h1{
+  font-size:40px;
+  line-height:1.1;
+  max-width:14ch;
+  color:#fff
+}
+
+.lbrand p{
+  max-width:38ch;
+  color:#B7CCC8;
+  margin:16px 0 0
+}
+
+.lform{
+  display:grid;
+  place-items:center;
+  padding:32px
+}
+
+.lform form{
+  width:100%;
+  max-width:340px
+}
+
+.lform h2{
+  font-size:24px
+}
+
+/* shell */
+
+#app{
+  display:grid;
+  grid-template-columns:230px 1fr;
+  min-height:100vh
+}
+
+nav{
+  background:var(--side);
+  color:#CFE0DC;
+  padding:22px 14px;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  position:sticky;
+  top:0;
+  height:100vh
+}
+
+nav .logo{
+  font-weight:700;
+  color:#fff;
+  font-size:17px;
+  padding:0 10px 18px
+}
+
+nav a{
+  color:inherit;
+  text-decoration:none;
+  padding:9px 10px;
+  border-radius:8px;
+  cursor:pointer
+}
+
+nav a:hover,
+nav a.active{
+  background:#fff;
+  color:var(--ink)
+}
+
+nav .sp{
+  flex:1
+}
+
+.profile{
+  border-top:1px solid #31565B;
+  padding:18px 10px 0
+}
+
+.profile b{
+  display:block;
+  color:#fff
+}
+
+.profile small{
+  display:block;
+  margin-top:2px
+}
+
+/* main */
+
+main{
+  padding:34px 40px;
+  min-width:0
+}
+
+.ph{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:26px
+}
+
+.ph .sp{
+  flex:1
+}
+
+.bar{
+  display:flex;
+  align-items:end;
+  gap:12px;
+  margin-bottom:18px;
+  flex-wrap:wrap
+}
+
+.bar label{
+  min-width:160px
+}
+
+.bar .sp{
+  flex:1
+}
+
+/* forms */
+
+label.fld,
+.bar label{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  color:var(--mut);
+  font-size:13px
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#fff;
+  padding:10px 11px;
+  outline:none
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:var(--pri)
+}
+
+textarea{
+  resize:vertical;
+  min-height:90px
+}
+
+.btn{
+  border:0;
+  border-radius:9px;
+  padding:10px 15px;
+  background:var(--pri);
+  color:#fff;
+  cursor:pointer;
+  font-weight:600
+}
+
+.btn:hover{
+  background:var(--prid)
+}
+
+.btn.ghost{
+  background:#fff;
+  color:var(--pri);
+  border:1px solid var(--pri)
+}
+
+.btn.ghost:hover{
+  background:var(--pri);
+  color:#fff
+}
+
+.btn.bad{
+  background:#fff;
+  color:var(--bad);
+  border:1px solid #E8B4AA
+}
+
+.btn.bad:hover{
+  background:var(--bad);
+  color:#fff
+}
+
+.btn.sm{
+  padding:6px 10px;
+  font-size:13px
+}
+
+.btn:disabled{
+  opacity:.5;
+  cursor:not-allowed
+}
+
+/* table */
+
+.tw{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:13px;
+  overflow:auto
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:700px
+}
+
+th,
+td{
+  text-align:left;
+  padding:13px 15px;
+  border-bottom:1px solid var(--line);
+  white-space:nowrap
+}
+
+th{
+  color:var(--mut);
+  font-weight:600;
+  background:#FBFCFC
+}
+
+tr:last-child td{
+  border-bottom:0
+}
+
+.act{
+  display:flex;
+  gap:7px;
+  justify-content:flex-end
+}
+
+.pill{
+  display:inline-block;
+  border-radius:999px;
+  padding:3px 9px;
+  background:#E5EFEE;
+  color:var(--pri);
+  font-size:12px;
+  font-weight:600
+}
+
+.empty{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:13px;
+  padding:35px;
+  text-align:center;
+  color:var(--mut)
+}
+
+.pager{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:12px;
+  margin-top:14px
+}
+
+.pager span{
+  color:var(--mut)
+}
+
+/* cards */
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:15px
+}
+
+.card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:13px;
+  padding:18px
+}
+
+.card .num{
+  font-size:26px;
+  font-weight:700
+}
+
+.card .lbl{
+  color:var(--mut);
+  margin-top:4px
+}
+
+/* modal */
+
+dialog{
+  border:0;
+  border-radius:14px;
+  padding:0;
+  width:min(520px,calc(100% - 30px));
+  box-shadow:0 20px 70px rgba(0,0,0,.2)
+}
+
+dialog::backdrop{
+  background:rgba(18,53,58,.45)
+}
+
+#mf{
+  padding:24px
+}
+
+.fld{
+  margin-bottom:14px
+}
+
+.mb{
+  display:flex;
+  justify-content:flex-end;
+  gap:9px;
+  margin-top:20px
+}
+
+/* toast */
+
+#toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:100;
+  display:flex;
+  flex-direction:column;
+  gap:8px
+}
+
+.toast{
+  background:var(--side);
+  color:#fff;
+  border-radius:9px;
+  padding:11px 15px;
+  box-shadow:0 5px 25px rgba(0,0,0,.15)
+}
+
+.toast.bad{
+  background:var(--bad)
+}
+
+/* responsive */
+
+@media(max-width:900px){
+
+  #app{
+    grid-template-columns:1fr
+  }
+
+  nav{
+    position:static;
+    height:auto
+  }
+
+  nav .sp{
+    display:none
+  }
+
+  main{
+    padding:25px 18px
+  }
+
+  #login{
+    grid-template-columns:1fr
+  }
+
+  .lbrand{
+    display:none
+  }
+
+  .cards{
+    grid-template-columns:1fr
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+
+<section id="login">
+
+  <div class="lbrand">
+
+    <h1>Employee Management System</h1>
+
+    <p>
+      Manage employees, attendance, leaves, departments and designations
+      from one place.
+    </p>
+
+  </div>
+
+  <div class="lform">
+
+    <form id="loginForm">
+
+      <h2>Sign in</h2>
+
+      <p style="color:var(--mut);margin-top:-5px">
+        Enter your employee credentials.
+      </p>
+
+      <label class="fld">
+        Email
+        <input
+          id="lemail"
+          type="email"
+          required
+          autocomplete="username">
+      </label>
+
+      <label class="fld">
+        Password
+        <input
+          id="lpassword"
+          type="password"
+          required
+          autocomplete="current-password">
+      </label>
+
+      <button class="btn" style="width:100%">
+        Sign in
+      </button>
+
+      <div id="lerr"
+           style="color:var(--bad);margin-top:12px">
+      </div>
+
+    </form>
+
+  </div>
+
+</section>
+
+
+<!-- APPLICATION -->
+
+<section id="app" class="hide">
+
+  <nav>
+
+    <div class="logo">
+      Employee System
+    </div>
+
+    <a data-view="employees">
+      Employees
+    </a>
+
+    <a data-view="attendance">
+      Attendance
+    </a>
+
+    <a data-view="leaves">
+      Leaves
+    </a>
+
+    <a data-view="departments">
+      Departments
+    </a>
+
+    <a data-view="designations">
+      Designations
+    </a>
+
+    <div class="sp"></div>
+
+    <div class="profile">
+
+      <b id="pname"></b>
+
+      <small id="prole"></small>
+
+      <button
+        class="btn ghost sm"
+        style="margin-top:10px"
+        onclick="logout()">
+        Sign out
+      </button>
+
+    </div>
+
+  </nav>
+
+
+  <main id="main"></main>
+
+</section>
+
+
+<dialog id="dlg"></dialog>
+
+<div id="toast"></div>
+
+
+<script>
+
+/* ---------- helpers ---------- */
+
+const $ = s => document.querySelector(s);
+
+const esc = x =>
+  String(x ?? '')
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'","&#039;");
+
+const money = x =>
+  Number(x ?? 0).toLocaleString('en-IN');
+
+const dt = x =>
+  x
+    ? new Date(x).toLocaleString('en-IN')
+    : '—';
+
+const today = () =>
+  new Date().toISOString().slice(0,10);
+
+function toast(msg,bad=0){
+
+  const d = document.createElement('div');
+
+  d.className =
+    'toast' + (bad ? ' bad' : '');
+
+  d.textContent = msg;
+
+  $('#toast').appendChild(d);
+
+  setTimeout(
+    () => d.remove(),
+    3000
+  );
+}
+
+function role(){
+
+  return me?.role || '';
+}
+
+function isAdmin(){
+
+  return role() === 'ADMIN';
+}
+
+function canApprove(){
+
+  return (
+    role() === 'ADMIN' ||
+    role() === 'MANAGER'
+  );
+}
+
+
+/* ---------- session ---------- */
+
+let me = null;
+
+try{
+
+  me = JSON.parse(
+    sessionStorage.getItem('session') || 'null'
+  );
+
+}catch{
+
+  me = null;
+}
+
+
+function saveSession(x){
+
+  me = x;
+
+  sessionStorage.setItem(
+    'session',
+    JSON.stringify(x)
+  );
+}
+
+
+function logout(){
+
+  sessionStorage.removeItem('session');
+
+  me = null;
+
+  $('#app').classList.add('hide');
+
+  $('#login').classList.remove('hide');
+
+  $('#loginForm').reset();
+}
+
+
+/* ---------- API ---------- */
+
+const API = '';
+
+async function api(
+  method,
+  path,
+  body
+){
+
+  const opt = {
+    method,
+    headers:{
+      'Content-Type':'application/json'
+    }
+  };
+
+  if(me?.token){
+
+    opt.headers.Authorization =
+      'Bearer ' + me.token;
+  }
+
+  if(body !== undefined){
+
+    opt.body =
+      JSON.stringify(body);
+  }
+
+  const r =
+    await fetch(API + path,opt);
+
+  if(r.status === 204)
+    return null;
+
+  const text =
+    await r.text();
+
+  let data = text;
+
+  try{
+    data = text ? JSON.parse(text) : null;
+  }catch{}
+
+  if(!r.ok){
+
+    throw new Error(
+      data?.message ||
+      data?.error ||
+      text ||
+      `Request failed (${r.status})`
+    );
+  }
+
+  return data;
+}
+
+
+/* ---------- login ---------- */
+
+$('#loginForm').onsubmit =
+  async e => {
+
+    e.preventDefault();
+
+    $('#lerr').textContent = '';
+
+    try{
+
+      const x = await api(
+        'POST',
+        '/auth/login',
+        {
+          email:$('#lemail').value.trim(),
+          password:$('#lpassword').value
+        }
+      );
+
+      saveSession({
+        token:x.token,
+        employeeId:x.employeeId,
+        name:x.name,
+        role:x.role
+      });
+
+      showApp();
+
+    }catch(err){
+
+      $('#lerr').textContent =
+        err.message;
+    }
+  };
+
+
+function showApp(){
+
+  $('#login').classList.add('hide');
+
+  $('#app').classList.remove('hide');
+
+  $('#pname').textContent =
+    me.name || '';
+
+  $('#prole').textContent =
+    me.role || '';
+
+  renderNav();
+
+  go('employees');
+}
+
+
+function renderNav(){
+
+  document
+    .querySelectorAll('nav a[data-view]')
+    .forEach(a => {
+
+      a.classList.toggle(
+        'active',
+        a.dataset.view === currentView
+      );
+
+      a.onclick =
+        () => go(a.dataset.view);
+
+    });
+}
+
+
+/* ---------- navigation ---------- */
+
+let currentView = '';
+
+function go(view){
+
+  currentView = view;
+
+  renderNav();
+
+  VIEWS[view]();
+}
+
+
+/* ---------- generic table ---------- */
+
+function table(
+  cols,
+  rows,
+  act
+){
+
+  if(!rows || !rows.length)
+    return '<div class="empty">No records found.</div>';
+
+  return `
+    <div class="tw">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            ${cols
+              .map(c =>
+                `<th>${c[0]}</th>`
+              )
+              .join('')}
+
+            ${act ? '<th></th>' : ''}
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          ${rows.map(r => `
+
+            <tr>
+
+              ${cols
+                .map(c =>
+                  `<td>${c[1](r)}</td>`
+                )
+                .join('')}
+
+              ${
+                act
+                  ? `<td class="act">${act(r)}</td>`
+                  : ''
+              }
+
+            </tr>
+
+          `).join('')}
+
+        </tbody>
+
+      </table>
+
+    </div>
+  `;
+}
+
+
+function pill(x){
+
+  return `
+    <span class="pill">
+      ${esc(x)}
+    </span>
+  `;
+}
+
+
+const fld =
+  (
+    label,
+    name,
+    val = '',
+    type = 'text',
+    extra = ''
+  ) =>
+  `
+    <label class="fld">
+
+      ${label}
+
+      <input
+        name="${name}"
+        type="${type}"
+        value="${esc(val)}"
+        ${extra}>
+
+    </label>
+  `;
+
+
+function modal(
+  title,
+  body,
+  save,
+  label = 'Save'
+){
+
+  const d = $('#dlg');
+
+  d.innerHTML = `
+
+    <form id="mf">
+
+      <h2>${title}</h2>
+
+      ${body}
+
+      <div class="mb">
+
+        <button
+          type="button"
+          class="btn ghost"
+          onclick="$('#dlg').close()">
+
+          Cancel
+
+        </button>
+
+        <button class="btn">
+
+          ${label}
+
+        </button>
+
+      </div>
+
+    </form>
+  `;
+
+  $('#mf').onsubmit =
+    async e => {
+
+      e.preventDefault();
+
+      try{
+
+        await save(
+          Object.fromEntries(
+            new FormData(e.target)
+          )
+        );
+
+        d.close();
+
+      }catch(x){
+
+        toast(
+          x.message,
+          1
+        );
+      }
+    };
+
+  d.showModal();
+}
+
+
+const head =
+  (title,btn='') =>
+  `
+    <header class="ph">
+
+      <h1>${title}</h1>
+
+      ${btn}
+
+    </header>
+  `;
+
+
+/* ---------- employees ---------- */
+
+let EP = {
+
+  mode:'all',
+
+  q:'',
+
+  page:0,
+
+  size:5,
+
+  sort:'id'
+
+};
+
+let EL = [];
+
+
+function vEmployees(){
+
+  $('#main').innerHTML =
+
+    head(
+      'Employees',
+
+      isAdmin()
+        ? `
+          <button
+            class="btn"
+            onclick="empForm()">
+            Add employee
+          </button>
+        `
+        : ''
+    )
+
+    +
+
+    `
+
+    <div class="bar">
+
+      <label>
+
+        Find by
+
+        <select
+          id="em"
+          onchange="EP.mode=this.value">
+
+          <option value="all">
+            All employees
+          </option>
+
+          <option value="name">
+            Name
+          </option>
+
+          <option value="dept">
+            Department
+          </option>
+
+          <option value="sal">
+            Minimum salary
+          </option>
+
+        </select>
+
+      </label>
+
+
+      <label>
+
+        Value
+
+        <input
+          id="eq"
+          placeholder="Search value"
+          onkeydown="
+            if(event.key==='Enter')
+              empSearch()
+          ">
+
+      </label>
+
+
+      <button
+        class="btn ghost"
+        onclick="empSearch()">
+
+        Search
+
+      </button>
+
+
+      <span class="sp"></span>
+
+
+      <label>
+
+        Sort by
+
+        <select
+          onchange="
+            EP.sort=this.value;
+            EP.page=0;
+            loadEmp()
+          ">
+
+          ${
+            [
+              'id',
+              'name',
+              'department',
+              'designation',
+              'salary'
+            ]
+            .map(s =>
+              `
+                <option
+                  ${s === EP.sort ? 'selected' : ''}>
+                  ${s}
+                </option>
+              `
+            )
+            .join('')
+          }
+
+        </select>
+
+      </label>
+
+
+      <label>
+
+        Rows
+
+        <select
+          onchange="
+            EP.size=+this.value;
+            EP.page=0;
+            loadEmp()
+          ">
+
+          ${
+            [5,10,20]
+              .map(s =>
+                `
+                  <option
+                    ${s === EP.size ? 'selected' : ''}>
+                    ${s}
+                  </option>
+                `
+              )
+              .join('')
+          }
+
+        </select>
+
+      </label>
+
+    </div>
+
+
+    <div id="el"></div>
+
+    <div id="ep"></div>
+
+    `;
+
+
+  $('#em').value =
+    EP.mode;
+
+  $('#eq').value =
+    EP.q;
+
+  loadEmp();
+}
+
+
+function empSearch(){
+
+  EP.mode =
+    $('#em').value;
+
+  EP.q =
+    $('#eq').value.trim();
+
+  EP.page = 0;
+
+  if(
+    EP.mode !== 'all' &&
+    !EP.q
+  ){
+
+    return toast(
+      'Enter a value to search.',
+      1
+    );
+  }
+
+  loadEmp();
+}
+
+
+async function loadEmp(){
+
+  const {
+    mode,
+    q,
+    page,
+    size,
+    sort
+  } = EP;
+
+  let pg = null,
+      rows;
+
+  try{
+
+    if(mode === 'all'){
+
+      pg = await api(
+        'GET',
+        `/employees/page?page=${page}&size=${size}&sortBy=${sort}`
+      );
+
+      rows = pg.content;
+
+    }
+
+    else if(mode === 'name'){
+
+      rows = await api(
+        'GET',
+        '/employees/search?name=' +
+        encodeURIComponent(q)
+      );
+
+    }
+
+    else if(mode === 'dept'){
+
+      rows = await api(
+        'GET',
+        '/employees/department/' +
+        encodeURIComponent(q)
+      );
+
+    }
+
+    else{
+
+      rows = await api(
+        'GET',
+        '/employees/salary?min=' +
+        encodeURIComponent(q)
+      );
+
+    }
+
+  }catch(e){
+
+    return toast(
+      e.message,
+      1
+    );
+  }
+
+
+  EL = rows;
+
+
+  $('#el').innerHTML =
+
+    table(
+
+      [
+
+        [
+          'ID',
+          r => r.id
+        ],
+
+        [
+          'Name',
+          r => esc(r.name)
+        ],
+
+        [
+          'Email',
+          r => esc(r.email)
+        ],
+
+        [
+          'Role',
+          r => pill(r.role)
+        ],
+
+        [
+          'Department',
+          r => esc(r.department)
+        ],
+
+        [
+          'Designation',
+          r => esc(r.designation)
+        ],
+
+        [
+          'Salary',
+          r => money(r.salary)
+        ]
+
+      ],
+
+      rows,
+
+      isAdmin()
+
+        ? r =>
+
+          `
+            <button
+              class="btn ghost sm"
+              onclick="empForm(${r.id})">
+
+              Edit
+
+            </button>
+
+            <button
+              class="btn bad sm"
+              onclick="empDel(${r.id})">
+
+              Delete
+
+            </button>
+          `
+
+        : null
+
+    );
+
+
+  $('#ep').innerHTML =
+
+    pg
+
+      ? `
+
+        <div class="pager">
+
+          <span>
+
+            Page
+            ${pg.number + 1}
+            of
+            ${Math.max(pg.totalPages,1)}
+
+            (${pg.totalElements}
+            employees)
+
+          </span>
+
+
+          <button
+            class="btn ghost sm"
+            ${pg.first ? 'disabled' : ''}
+            onclick="
+              EP.page--;
+              loadEmp()
+            ">
+
+            Previous
+
+          </button>
+
+
+          <button
+            class="btn ghost sm"
+            ${pg.last ? 'disabled' : ''}
+            onclick="
+              EP.page++;
+              loadEmp()
+            ">
+
+            Next
+
+          </button>
+
+        </div>
+
+      `
+
+      : '';
+}
+
+
+/* ---------- employee form ---------- */
+
+async function empForm(id){
+
+  const e =
+    id
+      ? EL.find(x => x.id === id)
+      : {};
+
+
+  let depts = [];
+
+  let designations = [];
+
+
+  try{
+
+    [
+      depts,
+      designations
+    ] = await Promise.all([
+
+      api(
+        'GET',
+        '/departments'
+      ),
+
+      api(
+        'GET',
+        '/designations'
+      )
+
+    ]);
+
+  }catch{}
+
+
+  const deptOptions =
+
+    depts
+      .map(d =>
+
+        `
+          <option
+            value="${esc(d.name)}"
+            ${
+              d.name === e.department
+                ? 'selected'
+                : ''
+            }>
+
+            ${esc(d.name)}
+
+          </option>
+        `
+
+      )
+      .join('');
+
+
+  const designationOptions =
+
+    designations
+      .map(d =>
+
+        `
+          <option
+            value="${esc(d.name)}"
+            ${
+              d.name === e.designation
+                ? 'selected'
+                : ''
+            }>
+
+            ${esc(d.name)}
+
+          </option>
+        `
+
+      )
+      .join('');
+
+
+  modal(
+
+    id
+      ? 'Edit employee'
+      : 'Add employee',
+
+
+    fld(
+      'Name',
+      'name',
+      e.name,
+      'text',
+      'required'
+    )
+
+    +
+
+    fld(
+      'Email',
+      'email',
+      e.email,
+      'email',
+      'required'
+    )
+
+    +
+
+    (
+
+      id
+
+        ? ''
+
+        :
+
+        fld(
+          'Password',
+          'password',
+          '',
+          'password',
+          'required autocomplete="new-password"'
+        )
+
+        +
+
+        `
+
+          <label class="fld">
+
+            Role
+
+            <select name="role">
+
+              <option>
+                EMPLOYEE
+              </option>
+
+              <option>
+                MANAGER
+              </option>
+
+              <option>
+                ADMIN
+              </option>
+
+            </select>
+
+          </label>
+
+        `
+
+    )
+
+    +
+
+    `
+
+      <label class="fld">
+
+        Department
+
+        <select
+          name="department"
+          required>
+
+          <option value="">
+            Select department
+          </option>
+
+          ${deptOptions}
+
+        </select>
+
+      </label>
+
+    `
+
+    +
+
+    `
+
+      <label class="fld">
+
+        Designation
+
+        <select
+          name="designation"
+          required>
+
+          <option value="">
+            Select designation
+          </option>
+
+          ${designationOptions}
+
+        </select>
+
+      </label>
+
+    `
+
+    +
+
+    fld(
+      'Salary',
+      'salary',
+      e.salary,
+      'number',
+      'required min="1" step="any"'
+    ),
+
+
+    async f => {
+
+      f.salary =
+        +f.salary;
+
+
+      if(id){
+
+        f.role =
+          e.role;
+
+
+        await api(
+          'PUT',
+          '/employees/' + id,
+          f
+        );
+
+
+        toast(
+          'Employee updated'
+        );
+
+      }else{
+
+        await api(
+          'POST',
+          '/employees',
+          f
+        );
+
+
+        toast(
+          'Employee added'
+        );
+
+      }
+
+
+      loadEmp();
+
+    },
+
+
+    id
+      ? 'Save changes'
+      : 'Add employee'
+
+  );
+
+}
+
+
+async function empDel(id){
+
+  if(
+
+    !confirm(
+      'Delete this employee? Their attendance and leave records may be affected.'
+    )
+
+  )
+    return;
+
+
+  try{
+
+    await api(
+      'DELETE',
+      '/employees/' + id
+    );
+
+
+    toast(
+      'Employee deleted'
+    );
+
+
+    loadEmp();
+
+  }catch(e){
+
+    toast(
+      e.message,
+      1
+    );
+
+  }
+
+}
+
+
+/* ---------- attendance ---------- */
+
+function vAttendance(){
+
+  const mark =
+    isAdmin() ||
+    role() === 'EMPLOYEE';
+
+
+  $('#main').innerHTML =
+
+    head('Attendance')
+
+    +
+
+    `
+
+    <div class="bar">
+
+      <label>
+
+        Employee ID
+
+        <input
+          id="aid"
+          type="number"
+          value="${me.employeeId}"
+          ${isAdmin() ? '' : 'readonly'}
+          style="width:110px">
+
+      </label>
+
+
+      ${
+        mark
+
+          ?
+
+          `
+
+            <button
+              class="btn ghost"
+              onclick="
+                attMark('check-in')
+              ">
+
+              Check in
+
+            </button>
+
+
+            <button
+              class="btn ghost"
+              onclick="
+                attMark('check-out')
+              ">
+
+              Check out
+
+            </button>
+
+          `
+
+          : ''
+
+      }
+
+
+      <button
+        class="btn ghost"
+        onclick="attEmp()">
+
+        Show records
+
+      </button>
+
+    </div>
+
+
+    ${
+      canApprove()
+
+        ?
+
+        `
+
+          <div class="bar">
+
+            <label>
+
+              Date
+
+              <input
+                id="ad"
+                type="date"
+                value="${today()}">
+
+            </label>
+
+
+            <button
+              class="btn ghost"
+              onclick="attDate()">
+
+              Daily report
+
+            </button>
+
+          </div>
+
+        `
+
+        : ''
+
+    }
+
+
+    <div id="al"></div>
+
+    `;
+
+
+  attEmp();
+
+}
+
+
+const attCols = [
+
+  [
+    'Date',
+    r => r.attendanceDate
+  ],
+
+  [
+    'Employee',
+    r => esc(r.employeeName)
+  ],
+
+  [
+    'Check in',
+    r => dt(r.checkIn)
+  ],
+
+  [
+    'Check out',
+    r => dt(r.checkOut)
+  ],
+
+  [
+    'Working hours',
+    r =>
+      r.workingHours == null
+        ? '—'
+        : r.workingHours
+  ]
+
+];
+
+
+async function attEmp(){
+
+  try{
+
+    $('#al').innerHTML =
+
+      table(
+
+        attCols,
+
+        await api(
+          'GET',
+          '/attendance/employee/' +
+          $('#aid').value
+        )
+
+      );
+
+  }catch(e){
+
+    toast(
+      e.message,
+      1
+    );
+
+  }
+
+}
+
+
+async function attDate(){
+
+  try{
+
+    $('#al').innerHTML =
+
+      table(
+
+        attCols,
+
+        await api(
+          'GET',
+          '/attendance/date/' +
+          $('#ad').value
+        )
+
+      );
+
+  }catch(e){
+
+    toast(
+      e.message,
+      1
+    );
+
+  }
+
+}
+
+
+async function attMark(kind){
+
+  try{
+
+    await api(
+
+      kind === 'check-in'
+        ? 'POST'
+        : 'PUT',
+
+      `/attendance/${kind}/${$('#aid').value}`
+
+    );
+
+
+    toast(
+
+      kind === 'check-in'
+        ? 'Checked in'
+        : 'Checked out'
+
+    );
+
+
+    attEmp();
+
+  }catch(e){
+
+    toast(
+      e.message,
+      1
+    );
+
+  }
+
+}
+
+
+/* ---------- leaves ---------- */
+
+let LV = 'MINE';
+
+
+function vLeaves(){
+
+  $('#main').innerHTML =
+
+    head(
+      'Leaves',
+
+      `
+        <button
+          class="btn"
+          onclick="leaveForm()">
+
+          Apply leave
+
+        </button>
+      `
+    )
+
+    +
+
+    `
+
+      <div class="bar">
+
+        ${
+          canApprove()
+
+            ?
+
+            `
+
+              <label>
+
+                View
+
+                <select
+                  onchange="
+                    LV=this.value;
+                    loadLeaves()
+                  ">
+
+                  <option value="MINE">
+                    My leaves
+                  </option>
+
+                  <option value="ALL">
+                    All leaves
+                  </option>
+
+                </select>
+
+              </label>
+
+            `
+
+            : ''
+
+        }
+
+      </div>
+
+
+      <div id="ll"></div>
+
+    `;
+
+
+  loadLeaves();
+
+}
+
+
+async function loadLeaves(){
+
+  try{
+
+    let rows;
+
+
+    if(
+      canApprove() &&
+      LV === 'ALL'
+    ){
+
+      const pending =
+        await api(
+          'GET',
+          '/employees/status/PENDING'
+        );
+
+
+      const approved =
+        await api(
+          'GET',
+          '/employees/status/APPROVED'
+        );
+
+
+      const rejected =
+        await api(
+          'GET',
+          '/employees/status/REJECTED'
+        );
+
+
+      rows = [
+        ...pending,
+        ...approved,
+        ...rejected
+      ];
+
+    }
+
+    else{
+
+      rows =
+        await api(
+          'GET',
+          '/employees/employee/' +
+          me.employeeId
+        );
+
+    }
+
+
+    $('#ll').innerHTML =
+
+      table(
+
+        [
+
+          [
+            'ID',
+            r => r.id
+          ],
+
+          [
+            'Employee',
+            r => esc(
+              r.employeeName || ''
+            )
+          ],
+
+          [
+            'From',
+            r => r.startDate
+          ],
+
+          [
+            'To',
+            r => r.endDate
+          ],
+
+          [
+            'Reason',
+            r => esc(r.reason)
+          ],
+
+          [
+            'Status',
+            r => pill(r.status)
+          ]
+
+        ],
+
+        rows,
+
+        canApprove()
+
+          ?
+
+          r =>
+
+            `
+
+              ${
+                r.status === 'PENDING'
+
+                  ?
+
+                  `
+
+                    <button
+                      class="btn ghost sm"
+                      onclick="
+                        leaveStatus(
+                          ${r.id},
+                          'APPROVED'
+                        )
+                      ">
+
+                      Approve
+
+                    </button>
+
+
+                    <button
+                      class="btn bad sm"
+                      onclick="
+                        leaveStatus(
+                          ${r.id},
+                          'REJECTED'
+                        )
+                      ">
+
+                      Reject
+
+                    </button>
+
+                  `
+
+                  : ''
+
+              }
+
+            `
+
+          : null
+
+      );
+
+  }
+
+  catch(e){
+
+    toast(
+      e.message,
+      1
+    );
+
+  }
+
+}
+
+
+function leaveForm(){
+
+  modal(
+
+    'Apply leave',
+
+    fld(
+      'From',
+      'startDate',
+      '',
+      'date',
+      'required'
+    )
+
+    +
+
+    fld(
+      'To',
+      'endDate',
+      '',
+      'date',
+      'required'
+    )
+
+    +
+
+    fld(
+      'Reason',
+      'reason',
+      '',
+      'text',
+      'required'
+    ),
+
+
+    async f => {
+
+      if(
+        !me ||
+        !me.employeeId
+      ){
+
+        throw new Error(
+          'Employee session not found. Please login again.'
+        );
+
+      }
+
+
+      if(
+        f.startDate >
+        f.endDate
+      ){
+
+        throw new Error(
+          'From date cannot be after To date.'
+        );
+
+      }
+
+
+      await api(
+
+        'POST',
+
+        '/employees/apply/' +
+        me.employeeId,
+
+        {
+          startDate:
+            f.startDate,
+
+          endDate:
+            f.endDate,
+
+          reason:
+            f.reason
+        }
+
+      );
+
+
+      toast(
+        'Leave applied successfully'
+      );
+
+
+      loadLeaves();
+
+    },
+
+
+    'Apply'
+
+  );
+
+}
+
+
+async function leaveStatus(
+  id,
+  status
+){
+
+  try{
+
+    await api(
+
+      'PUT',
+
+      `/employees/${id}/status?status=${status}`
+
+    );
+
+
+    toast(
+      'Leave status updated'
+    );
+
+
+    loadLeaves();
+
+  }
+
+  catch(e){
+
+    toast(
+      e.message,
+      1
+    );
+
+  }
+
+}
+
+/* ---------- departments / designations ---------- */
+
+let CRUD = {
+
+  path:'',
+  one:'',
+  rows:[]
+
+};
+
+
+function crudView(
+  path,
+  one,
+  many
+){
+
+  CRUD.path = path;
+
+  CRUD.one = one;
+
+  $('#main').innerHTML =
+
+    head(
+
+      many,
+
+      isAdmin()
+
+        ?
+
+        `
+
+          <button
+            class="btn"
+            onclick="crudForm()">
+
+            Add ${one}
+
+          </button>
+
+        `
+
+        : ''
+
+    )
+
+    +
+
+    '<div id="cl"></div>';
+
+
+  crudLoad();
+
+}
+
+
+async function crudLoad(){
+
+  try{
+
+    CRUD.rows =
+      await api(
+        'GET',
+        CRUD.path
+      );
+
+
+    $('#cl').innerHTML =
+
+      table(
+
+        [
+
+          [
+            'ID',
+            r => r.id
+          ],
+
+          [
+            'Name',
+            r => esc(r.name)
+          ]
+
+        ],
+
+        CRUD.rows,
+
+        isAdmin()
+
+          ?
+
+          r =>
+
+            `
+
+              <button
+                class="btn ghost sm"
+                onclick="
+                  crudForm(${r.id})
+                ">
+
+                Edit
+
+              </button>
+
+
+              <button
+                class="btn bad sm"
+                onclick="
+                  crudDel(${r.id})
+                ">
+
+                Delete
+
+              </button>
+
+            `
+
+          : null
+
+      );
+
+  }catch(e){
+
+    toast(
+      e.message,
+      1
+    );
+
+  }
+
+}
+
+
+function crudForm(id){
+
+  const r =
+    id
+      ? CRUD.rows.find(
+          x => x.id === id
+        )
+      : {};
+
+
+  modal(
+
+    id
+      ? `Edit ${CRUD.one}`
+      : `Add ${CRUD.one}`,
+
+    fld(
+      'Name',
+      'name',
+      r.name,
+      'text',
+      'required'
+    ),
+
+
+    async f => {
+
+      if(id){
+
+        await api(
+          'PUT',
+          `${CRUD.path}/${id}`,
+          f
+        );
+
+      }else{
+
+        await api(
+          'POST',
+          CRUD.path,
+          f
+        );
+
+      }
+
+
+      toast(
+        `${CRUD.one} saved`
+      );
+
+
+      crudLoad();
+
+    },
+
+
+    'Save'
+
+  );
+
+}
+
+
+async function crudDel(id){
+
+  if(
+    !confirm(
+      `Delete this ${CRUD.one}?`
+    )
+  )
+    return;
+
+
+  try{
+
+    await api(
+      'DELETE',
+      `${CRUD.path}/${id}`
+    );
+
+
+    toast(
+      `${CRUD.one} deleted`
+    );
+
+
+    crudLoad();
+
+  }catch(e){
+
+    toast(
+      e.message,
+      1
+    );
+
+  }
+
+}
+
+
+/* ---------- views ---------- */
+
+const VIEWS = {
+
+  employees:
+    vEmployees,
+
+  attendance:
+    vAttendance,
+
+  leaves:
+    vLeaves,
+
+  departments:
+    () =>
+      crudView(
+        '/departments',
+        'department',
+        'Departments'
+      ),
+
+  designations:
+    () =>
+      crudView(
+        '/designations',
+        'designation',
+        'Designations'
+      )
+
+};
+
+
+/* ---------- startup ---------- */
+
+if(me){
+
+  showApp();
+
+}
+
+</script>
+
+</body>
+</html>

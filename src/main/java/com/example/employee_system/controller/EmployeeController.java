@@ -131,7 +131,7 @@ public Page<EmployeeDTO> getEmployeesWithPagination(
     Pageable pageable = PageRequest.of(
             page,
             size,
-            Sort.by(sortBy).descending()
+            Sort.by(sortBy).ascending()
     );
 
     return employeeService.getEmployees(pageable)

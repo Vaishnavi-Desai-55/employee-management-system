@@ -39,6 +39,9 @@ public class Employee {
     @NotBlank(message = "Department is required")
     private String department;
 
+    @NotBlank(message = "Designation is required")
+    private String designation;
+
     @Positive(message = "Salary must be greater than 0")
     private Double salary;
 
@@ -57,6 +60,7 @@ public class Employee {
                     String password,
                     Role role,
                     String department,
+                    String designation,
                     Double salary) {
 
         this.id = id;
@@ -65,6 +69,7 @@ public class Employee {
         this.password = password;
         this.role = role;
         this.department = department;
+        this.designation = designation;
         this.salary = salary;
     }
 
@@ -114,6 +119,14 @@ public class Employee {
 
     public void setDepartment(String department) {
         this.department = department;
+    }
+
+    public String getDesignation() {
+        return designation;
+    }
+
+    public void setDesignation(String designation) {
+        this.designation = designation;
     }
 
     public Double getSalary() {

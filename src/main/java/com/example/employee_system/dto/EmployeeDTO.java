@@ -26,6 +26,9 @@ public class EmployeeDTO {
     @NotBlank(message = "Department is required")
     private String department;
 
+    @NotBlank(message = "Designation is required")
+    private String designation;
+
     @Positive(message = "Salary must be greater than 0")
     private Double salary;
 
@@ -34,13 +37,15 @@ public class EmployeeDTO {
     }
 
     // Parameterized constructor
-    public EmployeeDTO(Long id,
-                       String name,
-                       String email,
-                       String password,
-                       Role role,
-                       String department,
-                       Double salary) {
+    public EmployeeDTO(
+            Long id,
+            String name,
+            String email,
+            String password,
+            Role role,
+            String department,
+            String designation,
+            Double salary) {
 
         this.id = id;
         this.name = name;
@@ -48,6 +53,7 @@ public class EmployeeDTO {
         this.password = password;
         this.role = role;
         this.department = department;
+        this.designation = designation;
         this.salary = salary;
     }
 
@@ -99,6 +105,14 @@ public class EmployeeDTO {
 
     public void setDepartment(String department) {
         this.department = department;
+    }
+
+    public String getDesignation() {
+        return designation;
+    }
+
+    public void setDesignation(String designation) {
+        this.designation = designation;
     }
 
     public Double getSalary() {
